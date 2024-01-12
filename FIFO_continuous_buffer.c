@@ -1,9 +1,9 @@
 #include "FIFO_continuous_buffer.h"
 #include "string.h" //使用memcpy()函数
 
-FIFO_contunuous_buffer FIFO_buf_by_normal_buf(unsigned char *buf_ADR, unsigned int _size, unsigned int max_output_size)
+FIFO_continuous_buffer FIFO_buf_by_normal_buf(unsigned char *buf_ADR, unsigned int _size, unsigned int max_output_size)
 {
-    FIFO_contunuous_buffer BUF;
+    FIFO_continuous_buffer BUF;
     BUF.buffer = buf_ADR;
     BUF.I_ptr = buf_ADR;
     BUF.O_ptr = buf_ADR;
@@ -13,7 +13,7 @@ FIFO_contunuous_buffer FIFO_buf_by_normal_buf(unsigned char *buf_ADR, unsigned i
     BUF.ERROR = 0;
     return BUF;
 }
-void FIFO_buffer_input_byte(FIFO_contunuous_buffer *buf, const unsigned char dat)
+void FIFO_buffer_input_byte(FIFO_continuous_buffer *buf, const unsigned char dat)
 {
     unsigned char *In = buf->I_ptr;
 
@@ -30,7 +30,7 @@ void FIFO_buffer_input_byte(FIFO_contunuous_buffer *buf, const unsigned char dat
     else
         buf->I_ptr = In;
 }
-unsigned int FIFO_buffer_input_many(FIFO_contunuous_buffer *buf, unsigned char *buf_in, unsigned int len) //
+unsigned int FIFO_buffer_input_many(FIFO_continuous_buffer *buf, unsigned char *buf_in, unsigned int len) //
 {
     unsigned int O1 = buf->O_ptr - buf->buffer;
     unsigned int I1 = buf->I_ptr - buf->buffer;
@@ -101,7 +101,7 @@ unsigned int FIFO_buffer_input_many(FIFO_contunuous_buffer *buf, unsigned char *
     max_datas : 期望分配长度
     return:实际分配长度
     */
-unsigned int FIFO_buffer_alloc_input(FIFO_contunuous_buffer *buf, unsigned char **buf_in, unsigned int max_datas)
+unsigned int FIFO_buffer_alloc_input(FIFO_continuous_buffer *buf, unsigned char **buf_in, unsigned int max_datas)
 {
     int count = 0;
     *buf_in = buf->I_ptr;
@@ -123,7 +123,7 @@ unsigned int FIFO_buffer_alloc_input(FIFO_contunuous_buffer *buf, unsigned char 
     buf : FIFO流控结构体的地址
     len : 之前读取的数据长度
     */
-void FIFO_buffer_alloc_free_input(FIFO_contunuous_buffer *buf, unsigned int len)
+void FIFO_buffer_alloc_free_input(FIFO_continuous_buffer *buf, unsigned int len)
 {
     unsigned char *I_buf = buf->I_ptr+len;
     if(buf->I_ptr<buf->begin_limit)
@@ -148,7 +148,7 @@ void FIFO_buffer_alloc_free_input(FIFO_contunuous_buffer *buf, unsigned int len)
     max_datas : 期望分配长度
     return:实际分配长度
     */
-unsigned int FIFO_buffer_alloc_output(FIFO_contunuous_buffer *buf, unsigned char **buf_out, unsigned int max_datas)
+unsigned int FIFO_buffer_alloc_output(FIFO_continuous_buffer *buf, unsigned char **buf_out, unsigned int max_datas)
 {
     int count = 0;
     *buf_out = buf->O_ptr;
@@ -172,7 +172,7 @@ unsigned int FIFO_buffer_alloc_output(FIFO_contunuous_buffer *buf, unsigned char
 buf : FIFO流控结构体的地址
 len : 之前读取的数据长度
 */
-void FIFO_buffer_alloc_free_output(FIFO_contunuous_buffer *buf, unsigned int len)
+void FIFO_buffer_alloc_free_output(FIFO_continuous_buffer *buf, unsigned int len)
 {
     unsigned char *O_buf = buf->O_ptr;
     O_buf += len;
@@ -183,7 +183,7 @@ void FIFO_buffer_alloc_free_output(FIFO_contunuous_buffer *buf, unsigned int len
     buf->O_ptr = O_buf;
 }
 
-unsigned char FIFO_buffer_output_byte(FIFO_contunuous_buffer *buf) //
+unsigned char FIFO_buffer_output_byte(FIFO_continuous_buffer *buf) //
 {
     unsigned char *Out = buf->O_ptr;
     if (buf->O_ptr == buf->I_ptr)
@@ -198,7 +198,7 @@ unsigned char FIFO_buffer_output_byte(FIFO_contunuous_buffer *buf) //
     return *Out;
 }
 
-unsigned int FIFO_buffer_length(FIFO_contunuous_buffer *buf) //
+unsigned int FIFO_buffer_length(FIFO_continuous_buffer *buf) //
 {
     unsigned int O1 = buf->O_ptr - buf->buffer;
     unsigned int O2 = buf->last_limit - buf->O_ptr + 1;
